@@ -2,22 +2,85 @@
 
 jQuery'i kullanırken diğer javascript frameworkleri gibi biraz daha reactive olsa dediğim çok zaman olmuştu zamanında. Artık çok fazla jquery kullanmasamda projelerinde hala kullananlar olabileceğini düşündüğüm için basit bir `data-api` sistemi geliştirdim.
 
+## Kullanabileceğiniz Metodlar
+
+- [setState()](#setstate-metodu)
+- [stateEffect()](#stateeffect-metodu)
+- [state()](#state-metodu)
+
+## Kullanabileceğiniz Nitelikler
+
+- [[data-state]](#data-state-niteliği)
+- [[data-block]](#data-block-niteliği)
+- [[data-disabled]](#data-disabled-niteliği)
+- [[data-class]](#data-class-niteliği)
+- [[data-show]](#data-show-niteliği)
+
 Örneklere bakarak ne işe yaradıklarını daha iyi anlayabilirsiniz.
 
-## Örnekler
+## Tüm Metodlar
 
-### State tanımlama
+### `setState()` metodu
 
-Stateleri iki farklı şekilde tanımlayabilirsiniz. `data-state` niteliğiyle ya da `setState()` metoduyla. Örnek vermek gerekirse;
-
-```html
-<input type="text" data-state="name" value="Tayfun" />
-```
-
-ya da 
+State tanımlamak için bu metodu ya da [[data-state]](#data-state-niteliği) niteliğini kullanabilirsiniz.
 
 ```js
 setState('name', 'Tayfun');
+setState('todos', [
+    {
+        text: 'todo 1',
+        done: false
+    },
+    {
+        text: 'todo 2',
+        done: true
+    }
+])
+```
+
+### `stateEffect()` metodu
+
+Tanımladığınız statelerde bir değişiklik olduğunda yakalamak için kullanabilirsiniz. Örneğin;
+
+```html
+<input type="text" data-state="name" placeholdre="Konsolda görmek için yazmaya başlayın" /> <br>
+<input type="text" data-state="surname" placeholdre="Erbilen" />
+
+<script>
+    stateEffect((newValue, oldValue, state) => {
+        // newValue = yeni değer
+        // oldValue = eski değer
+        // state    = hangi state olduğu
+        console.log('State değişti', newValue, state);
+    }, ['name', 'surname'])
+</script>
+```
+
+### `state()` metodu
+
+State değerini almak için bu metodu kullanabilirsiniz. Örneğin;
+
+```html
+<input type="text" data-state="name" placeholder="Bir şeyler yazın..">
+<button onclick="getName()">Adı getir</button>
+
+<script>
+function getName() {
+    alert(state('name')); // inputa girilen değer
+    // ya da $state değişkenini kullanabilirsiniz
+    alert($state.name); // inputa girilen değer
+}
+</script>
+```
+
+## Tüm Nitelikler
+
+### `[data-state]` niteliği
+
+Değişebilir değerlerinizi tanımlamak için bu niteliği kullanabilirsiniz. Örneğin;
+
+```html
+<input type="text" data-state="name" value="Tayfun" />
 ```
 
 Bütün stateler `$state` global değişkenin altında tutuluyor. Yani oluşturduğunuz state'e `$state.key` şeklinde ya da `state('key')` şeklinde erişebilirsiniz.
@@ -46,24 +109,6 @@ ya da bir javascript ifadesine örnek vermek gerekirse
 </div>
 ```
 
-### `stateEffect()` metodu
-
-Tanımladığınız statelerde bir değişiklik olduğunda yakalamak için kullanabilirsiniz. Örneğin;
-
-```html
-<input type="text" data-state="name" placeholdre="Konsolda görmek için yazmaya başlayın" /> <br>
-<input type="text" data-state="surname" placeholdre="Erbilen" />
-
-<script>
-    stateEffect((newValue, oldValue, state) => {
-        // newValue = yeni değer
-        // oldValue = eski değer
-        // state    = hangi state olduğu
-        console.log('State değişti', newValue, state);
-    }, ['name', 'surname'])
-</script>
-```
-
 ### `[data-disabled]` niteliği
 
 Duruma göre `disabled` niteliği eklemek için kullanabilirsiniz. Örneğin;
@@ -71,4 +116,36 @@ Duruma göre `disabled` niteliği eklemek için kullanabilirsiniz. Örneğin;
 ```html
 <input type="text" data-state="name" placeholder="Adınızı yazın"> <br>
 <button data-disabled="!$state.name">Gönder</button>
+```
+
+### `[data-class]` niteliği
+
+Duruma göre `class` ekletmek için kullanabilirsiniz. Örneğin;
+
+```html
+<style>
+.accepted {
+    background: lime;
+}
+</style>
+
+<label data-block data-class="[$state.accept, 'accepted']">
+    <input type="checkbox" value="1" data-state="accept" />
+    {$state.accept ? 'Kabul ettiğiniz için teşekkürler' : 'Kuralları kabul et'}
+</label>
+```
+
+### `[data-show]` niteliği
+
+Duruma göre gizleyip/göstermek istediğiniz alanlar için kullanabilirsiniz. Örneğin;
+
+```html
+<label>
+    <input type="checkbox" data-state="accept_rules" value="1">
+    Kuralları kabul edin
+</label>
+
+<div data-show="$state.accept_rules" style="padding: 10px; background: lime">
+    burayı kuralları kabul ettiğinizde göreceksiniz!
+</div>
 ```
