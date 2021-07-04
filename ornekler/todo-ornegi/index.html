@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jquery-data-api / todo örneği</title>
+    <link rel="stylesheet" href="./todo.css">
+</head>
+<body>
+
+    <header>
+        jquery-data-api
+        <span>todo örneği</span>
+    </header>
+
+    <div class="container">
+        <form onsubmit="return false">
+            <div class="flex-container">
+                <div class="flex-item flex-auto">
+                    <input type="text" data-state="todo" placeholder="Todo başlığınızı yazın">
+                </div>
+                <div class="flex-item">
+                    <label>
+                        <input type="checkbox" data-state="done" value="1">
+                        Yapıldı olarak işaretle
+                    </label>
+                </div>
+                <div class="flex-item flex-button">
+                    <button type="submit" onclick="addTodo()">Ekle</button>
+                </div>
+            </div>
+        </form>
+
+        <div data-show="$state.todos && $state.todos.length > 0" class="todos">
+            <h3>Todo Listesi</h3>
+            <ul data-for="todos" data-as="todo">
+                <template>
+                    <li class="{todo.done ? 'done' : ''}" onclick="updateTodo({todo})">
+                        <span>
+                            {todo.content}
+                        </span>
+                        <button onclick="deleteTodo('{todo.id}', event)">Sil</button>
+                    </li>
+                </template>
+            </ul>
+            <div class="flex-container" data-show="$state.todos && $state.todos.length > 1">
+                <div class="flex-item flex-button">
+                    <button onclick="reverseTodo()">Sırayı Tersine Çevir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../jquery-data-api.js"></script>
+    <script src="./todo.js"></script>
+    
+</body>
+</html>
