@@ -51,7 +51,8 @@ ya da bir javascript ifadesine örnek vermek gerekirse
 Tanımladığınız statelerde bir değişiklik olduğunda yakalamak için kullanabilirsiniz. Örneğin;
 
 ```html
-<input type="text" data-state="name" placeholdre="Konsolda görmek için yazmaya başlayın" />
+<input type="text" data-state="name" placeholdre="Konsolda görmek için yazmaya başlayın" /> <br>
+<input type="text" data-state="surname" placeholdre="Erbilen" />
 
 <script>
     stateEffect((newValue, oldValue, state) => {
@@ -59,6 +60,15 @@ Tanımladığınız statelerde bir değişiklik olduğunda yakalamak için kulla
         // oldValue = eski değer
         // state    = hangi state olduğu
         console.log('State değişti', newValue, state);
-    }, ['name'])
+    }, ['name', 'surname'])
 </script>
+```
+
+### `[data-disabled]` niteliği
+
+Duruma göre `disabled` niteliği eklemek için kullanabilirsiniz. Örneğin;
+
+```html
+<input type="text" data-state="name" placeholder="Adınızı yazın"> <br>
+<button data-disabled="!$state.name">Gönder</button>
 ```
