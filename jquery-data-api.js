@@ -1,13 +1,13 @@
 const $state = {},
     $watchStates = true,
-    $debug = true;
+    $debug = false;
 
 const setWatchStates = function(val) {
     $watchStates = val;
 }
 
 if ($debug) {
-    window.onerror = function(event, source, line, col, error) {
+    window.onerror = function(msg) {
         const div = $('<div>');
         div.css({
             backgroundColor: 'red',
@@ -18,7 +18,7 @@ if ($debug) {
             zIndex: '999999',
             color: '#fff',
             padding: '15px'
-        }).html(event);
+        }).html(msg);
         div.appendTo('body');
     }
 }
@@ -26,6 +26,7 @@ if ($debug) {
 const setState = function(name, value) {
     setStateEvent(name, value, $state[name]);
     $state[name] = value;
+    updateDom(name, value);
     watchExpressions();
 }
 
@@ -33,6 +34,49 @@ const updateState = function(name, value) {
     setStateEvent(name, value, $state[name]);
     $state[name] = value;
     watchExpressions();
+    updateDom(name, value);
+}
+
+const updateDom = function(name, value) {
+    const el = $('[data-state="' + name + '"]');
+
+    if ( el.is('input:not(:checkbox):not(:radio):not(:file)') ) {
+        el.val(value);
+    }
+
+    if ( el.is(':checkbox') ) {
+        el.prop('checked', value);
+    }
+
+    if ( el.is(':radio') ) {
+        el.prop('checked', value);
+    }
+
+    if ( el.is(':file') ) {
+        el.val(value);
+    }
+
+    if ( el.is('select') ) {
+        el.find('option[value="' + value + '"]').attr('selected', 'selected');
+    }
+
+    const forLoopBlock = $('[data-for="' + name + '"]');
+    if (forLoopBlock) {
+        let template = forLoopBlock.find('template').clone();
+        forLoopBlock.html('').append(template);
+        $.each(value, function(key, item) {
+            eval('var ' + forLoopBlock.data('as') + ' = ' + JSON.stringify(item) + ';');
+            let template = forLoopBlock.find('template').html();
+            template = template.replaceAll(/\{(.*?)\}/g, function(match, contents) {
+                if (typeof eval(contents) === 'object') {
+                    return JSON.stringify(eval(contents)).replaceAll('"', "'");
+                }
+                return eval(contents);
+            });
+            forLoopBlock.append(template);
+        });
+    }
+
 }
 
 const watchStates = function() {
@@ -40,7 +84,7 @@ const watchStates = function() {
     /*
         Checkbox, select, radio ve file inputları hariç diğer inputları kontrol eder.
     */
-    $(document).on('keyup keypress', '[data-input]', function(){
+    $(document).on('keyup keypress input', '[data-input]', function(){
         let name = $(this).data('state'),
             value = $(this).val();
         if ( value.match(/^[0-9\.\,]+$/) ) {
@@ -151,12 +195,16 @@ const watchExpressions = function() {
     });
 }
 
-const stateEffect = function(callback, states = []) {
-    $.each(states, (key, state) => {
-        $(document).on(state, function(event, newValue, oldValue) {
-            callback(newValue, oldValue, state);
+const stateEffect = function(callback, states = false) {
+    if (states){
+        $.each(states, (key, state) => {
+            $(document).on(state, function(event, newValue, oldValue) {
+                callback(newValue, oldValue, state);
+            });
         });
-    });
+    } else {
+        callback();
+    }
 }
 
 const updateBlocks = function() {
@@ -185,15 +233,24 @@ const setDomStates = function() {
                 value = parseFloat(value);
             }
             $(this).attr('data-input', '');
+            if ($state[name]) {
+                $(this).val($state[name]);
+            }
         }
 
         if ( $(this).is(':checkbox') ) {
             value = $(':checked', this).val();
+            if ($state[name]) {
+                $(this).prop('checked', $state[name]);
+            }
             $(this).attr('data-checkbox', '');
         }
 
         if ( $(this).is(':radio') ) {
             value = $(this).filter(':checked').val();
+            if ($state[name]) {
+                $(this).prop('checked', $state[name]);
+            }
             $(this).attr('data-radio', '');
         }
 
@@ -204,6 +261,15 @@ const setDomStates = function() {
 
         if ( $(this).is('select') ) {
             value = $('option:selected', this).val();
+            if ($state[name]) {
+                if (typeof $state[name] === 'object') {
+                    $.each($state[name], function(key, val) {
+                        $(this).find('option[value="' + val + '"]').attr('selected', 'selected');
+                    }.bind(this));
+                } else {
+                    $(this).find('option[value="' + $state[name] + '"]').attr('selected', 'selected');
+                }
+            }
             $(this).attr('data-select', '');
         }
     
@@ -220,15 +286,13 @@ const setStateEvent = function(key, newValue, oldValue) {
     $(document).trigger(key, [newValue, oldValue]);
 }
 
+const getState = function(name) {
+    return $state[name];
+}
+
 setDomStates();
 updateBlocks();
 if ($watchStates) {
     watchStates();
 }
 watchExpressions();
-
-//setState('accept', false);
-
-stateEffect((value, oldValue, state) => {
-    // console.log('state changed', value, oldValue, state);
-}, ['avatar']);

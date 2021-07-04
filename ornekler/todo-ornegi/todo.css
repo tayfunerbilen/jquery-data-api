@@ -1,0 +1,115 @@
+* {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body {
+    background: #eee;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+header {
+    height: 60px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+header span {
+    margin-left: 15px;
+    padding-left: 15px;
+    border-left: 1px solid #ddd;
+    color: rgb(39, 74, 230);
+}
+
+.container {
+    width: 800px;
+    max-width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 15px;
+    border-radius: 3px;
+    box-shadow: 3px 5px 10px 0 rgba(0,0,0,.1);
+}
+
+input[type="text"] {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #ddd;
+    padding: 0 15px;
+    font-size: 16px;
+    border-radius: 3px;
+}
+
+.flex-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.flex-item {
+    flex: 1;
+}
+.flex-auto {
+    flex: auto;
+}
+
+.flex-button button {
+    width: 100%;
+    height: 50px;
+    background: rgb(39, 74, 230);
+    border-radius: 3px;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.todos {
+    padding: 15px;
+    background: rgba(39, 74, 230, 0.027);
+    margin-top: 15px
+}
+
+.todos h3 {
+    margin-bottom: 10px;
+}
+
+.todos ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    border-bottom: 1px solid #ddd;
+}
+
+.todos ul li button {
+    height: 35px;
+    padding: 0 15px;
+    background: rgb(39, 74, 230);
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.todos ul li span {
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+.todos ul li.done {
+    box-shadow: 3px 0 0 0 green inset;
+    padding-left: 10px;
+}
+
+.todos ul li.done span {
+    text-decoration: line-through;
+}

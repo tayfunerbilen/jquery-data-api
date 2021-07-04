@@ -5,8 +5,9 @@ jQuery'i kullanırken diğer javascript frameworkleri gibi biraz daha reactive o
 ## Kullanabileceğiniz Metodlar
 
 - [setState()](#setstate-metodu)
+- [getState()](#getstate-metodu)
+- [updateState()](#updatestate-metodu)
 - [stateEffect()](#stateeffect-metodu)
-- [state()](#state-metodu)
 
 ## Kullanabileceğiniz Nitelikler
 
@@ -17,6 +18,8 @@ jQuery'i kullanırken diğer javascript frameworkleri gibi biraz daha reactive o
 - [[data-show]](#data-show-niteliği)
 
 Örneklere bakarak ne işe yaradıklarını daha iyi anlayabilirsiniz.
+
+---
 
 ## Tüm Metodlar
 
@@ -38,6 +41,32 @@ setState('todos', [
 ])
 ```
 
+### `getState()` metodu
+
+State değerini almak için bu metodu kullanabilirsiniz. Örneğin;
+
+```html
+<input type="text" data-state="name" placeholder="Bir şeyler yazın..">
+<button onclick="getName()">Adı getir</button>
+
+<script>
+function getName() {
+    alert(getState('name')); // inputa girilen değer
+    // ya da $state değişkenini kullanabilirsiniz
+    alert($state.name); // inputa girilen değer
+}
+</script>
+```
+
+### `updateState()` metodu
+
+Mevcut state'i güncellemek için kullanabilirsiniz. Örneğin;
+
+```html
+<input type="text" data-state="name" />
+<button onclick="updateState('name', 'Tayfun')">Güncelle</button>
+```
+
 ### `stateEffect()` metodu
 
 Tanımladığınız statelerde bir değişiklik olduğunda yakalamak için kullanabilirsiniz. Örneğin;
@@ -56,22 +85,7 @@ Tanımladığınız statelerde bir değişiklik olduğunda yakalamak için kulla
 </script>
 ```
 
-### `state()` metodu
-
-State değerini almak için bu metodu kullanabilirsiniz. Örneğin;
-
-```html
-<input type="text" data-state="name" placeholder="Bir şeyler yazın..">
-<button onclick="getName()">Adı getir</button>
-
-<script>
-function getName() {
-    alert(state('name')); // inputa girilen değer
-    // ya da $state değişkenini kullanabilirsiniz
-    alert($state.name); // inputa girilen değer
-}
-</script>
-```
+---
 
 ## Tüm Nitelikler
 
@@ -106,6 +120,17 @@ ya da bir javascript ifadesine örnek vermek gerekirse
 <div data-block>
     <input type="checkbox" data-state="accept" value="1" /> <br>
     ${$state.accept ? 'Kuralları kabul ettin' : 'Lütfen kuralları kabul et'}
+</div>
+```
+
+bir başka örnek
+
+```html
+<input type="number" data-state="num1" value="2" /> <br>
+<input type="number" data-state="num2" value="3" />
+
+<div data-block>
+    {$state.num1 * $state.num2}
 </div>
 ```
 
