@@ -45,3 +45,20 @@ ya da bir javascript ifadesine örnek vermek gerekirse
     ${$state.accept ? 'Kuralları kabul ettin' : 'Lütfen kuralları kabul et'}
 </div>
 ```
+
+### `stateEffect()` metodu
+
+Tanımladığınız statelerde bir değişiklik olduğunda yakalamak için kullanabilirsiniz. Örneğin;
+
+```html
+<input type="text" data-state="name" placeholdre="Konsolda görmek için yazmaya başlayın" />
+
+<script>
+    stateEffect((newValue, oldValue, state) => {
+        // newValue = yeni değer
+        // oldValue = eski değer
+        // state    = hangi state olduğu
+        console.log('State değişti', newValue, state);
+    }, ['name'])
+</script>
+```

@@ -6,14 +6,14 @@ const setWatchStates = function(val) {
 }
 
 const setState = function(name, value) {
+    setStateEvent(name, value, $state[name]);
     $state[name] = value;
-    setStateEvent(name, value);
     watchExpressions();
 }
 
 const updateState = function(name, value) {
+    setStateEvent(name, value, $state[name]);
     $state[name] = value;
-    setStateEvent(name, value);
     watchExpressions();
 }
 
@@ -26,7 +26,7 @@ const watchStates = function() {
         const name = $(this).data('state'),
             value = $(this).val();
         if ($state[name] !== value) {
-            setStateEvent(name, value);
+            setStateEvent(name, value, $state[name]);
             $state[name] = value;
             watchExpressions();
         }
@@ -39,7 +39,7 @@ const watchStates = function() {
         const name = $(this).data('state'),
             value = $(this).prop('checked');
         if ($state[name] !== value) {
-            setStateEvent(name, value);
+            setStateEvent(name, value, $state[name]);
             $state[name] = value;
             watchExpressions();
         }
@@ -71,8 +71,8 @@ const watchExpressions = function() {
 
 const stateEffect = function(callback, states = []) {
     $.each(states, (key, state) => {
-        $(document).on(state, function(event, value) {
-            callback(value, state);
+        $(document).on(state, function(event, newValue, oldValue) {
+            callback(newValue, oldValue, state);
         });
     });
 }
@@ -111,13 +111,13 @@ const setDomStates = function() {
             $state[name] = value;
         }
 
-        setStateEvent(name, value);
+        setStateEvent(name, value, value);
     
     });
 }
 
-const setStateEvent = function(key, value) {
-    $(document).trigger(key, [value]);
+const setStateEvent = function(key, newValue, oldValue) {
+    $(document).trigger(key, [newValue, oldValue]);
 }
 
 setDomStates();
@@ -129,6 +129,6 @@ watchExpressions();
 
 //setState('accept', false);
 
-stateEffect((value, state) => {
-    console.log('state changed', value, state);
+stateEffect((value, oldValue, state) => {
+    console.log('state changed', value, oldValue, state);
 }, ['accept', 'name', 'surname']);
