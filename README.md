@@ -16,10 +16,20 @@ jQuery'i kullanırken diğer javascript frameworkleri gibi biraz daha reactive o
 - [[data-disabled]](#data-disabled-niteliği)
 - [[data-class]](#data-class-niteliği)
 - [[data-show]](#data-show-niteliği)
+- [[data-expression]](#data-expression-niteliği)
 
-Örneklere bakarak ne işe yaradıklarını daha iyi anlayabilirsiniz.
+## Örnek Kullanımlar
+
+Örneklere bakarak bu scriptin ne yaptığını daha iyi anlayabilirsiniz.
+
+- [Tab Örneği](https://github.com/tayfunerbilen/jquery-data-api/tree/main/ornekler/tab-ornegi)
+- [Form Örneği](https://github.com/tayfunerbilen/jquery-data-api/tree/main/ornekler/form-ornegi)
+- [Todolist Örneği](https://github.com/tayfunerbilen/jquery-data-api/tree/main/ornekler/todo-ornegi)
+- [Para Harcama Örneği](https://github.com/tayfunerbilen/jquery-data-api/tree/main/ornekler/para-harcama-ornegi)
 
 ---
+
+> **Not:** Bu script'in hataları olabilir. Javascript frameworkleri gibi çalışmaz, belli kurallar dahilinde kodlarınıza biraz reactivite katmak için kullanabilirsiniz. SPA oluşturmak için yeterli değildir, örneklerde basit bir SPA oluşturduk ancak bu scriptin amacına çokta uygun bir örnek değil bunu aklınızdan çıkarmayın :)
 
 ## Tüm Metodlar
 
@@ -173,4 +183,15 @@ Duruma göre gizleyip/göstermek istediğiniz alanlar için kullanabilirsiniz. �
 <div data-show="$state.accept_rules" style="padding: 10px; background: lime">
     burayı kuralları kabul ettiğinizde göreceksiniz!
 </div>
+```
+
+### `[data-expression]` niteliği
+
+Javascript ifadeleri çalıştırmak için kullanabilirsiniz. Genellikle `[data-for]` içinde kullanırsanız işinize çok yarayacaktır. State güncellendiğinde otomatik olarak bu ifadede güncellenecektir. Örneğin;
+
+```html
+<input type="text" data-state="name" value="Tayfun">
+<button onclick="updateState('name', 'Murat')">İsmi Değiştir</button>
+
+<div data-expression="$state.name === 'Murat' ? 'Yanlış isim' : 'Doğru yoldasın!'"></div>
 ```

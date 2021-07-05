@@ -90,3 +90,8 @@ pre {
     font-size: 16px;
     margin-top: 20px;
 }
+
+[disabled] {
+    opacity: .3;
+    pointer-events: none;
+}

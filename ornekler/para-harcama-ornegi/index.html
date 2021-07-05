@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jquery-data-api / para harcama örneği</title>
+    <link rel="stylesheet" href="./para.css">
+</head>
+<body>
+
+    <header>
+        jquery-data-api
+        <span>para harcama örneği</span>
+    </header>
+
+    <div class="container">
+
+        <div class="total-money" data-class="[$state.money - $state.total === 0, 'empty']" data-block>
+            <div data-show="$state.money - $state.total !== 0">
+                Harcamak için {moneyFormat($state.money - $state.total)} paranız var!
+            </div>
+            <div data-show="$state.money - $state.total === 0">
+                Paran bitti, parasız insan boş insandır!
+            </div>
+        </div>
+
+        <ul data-for="items" data-as="item" class="items">
+            <template>
+                <li>
+                    <div class="title">
+                        {item.name}
+                    </div>
+                    <div class="price">
+                        {moneyFormat(item.price)}
+                    </div>
+                    <div class="actions">
+                        <button data-disabled="!$state.basket.find(i => i.id === {item.id})" onclick="removeBasket({item})" class="sell-btn">Sat</button>
+                        <div class="amount" data-expression="$state.basket.find(item => item.id === {item.id})?.amount || 0"></div>
+                        <button data-disabled="$state.total + {item.price} > $state.money" onclick="addBasket({item})" class="buy-btn">Al</button>
+                    </div>
+                </li>
+            </template>
+        </ul>
+
+        <div class="basket" data-show="$state.basket && $state.basket.length">
+            <h3>Alışveriş Detayları</h3>
+            <ul data-for="basket" data-as="item">
+                <template>
+                    <li class="basket-item">
+                        {getProduct(item.id).name} <span>x {item.amount}</span>
+                    </li>
+                </template>
+            </ul>
+            <div class="total" data-block>
+                Toplam: {moneyFormat($state.total)}
+            </div>
+            <button class="basket-reset-btn" onClick="resetBasket()">Sepeti Sıfırla</button>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const moneyFormat = (price) => {
+            return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(price);
+        }
+    </script>
+    <script src="../../jquery-data-api.js"></script>
+    <script src="./para.js"></script>
+    
+</body>
+</html>

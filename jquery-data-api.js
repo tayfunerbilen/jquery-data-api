@@ -40,15 +40,17 @@ const stateCheckDepth = (name, value) => {
 }
 
 const setState = function(name, value) {
-    setStateEvent(name, value, $state[name]);
+    const oldValue = $state[name];
     stateUpdateDepth(name, value);
+    setStateEvent(name, value, oldValue);
     updateDom(name, value);
     watchExpressions();
 }
 
 const updateState = function(name, value) {
-    setStateEvent(name, value, $state[name]);
+    const oldValue = $state[name];
     stateUpdateDepth(name, value);
+    setStateEvent(name, value, oldValue);
     watchExpressions();
     updateDom(name, value);
 }
@@ -84,6 +86,10 @@ const updateDom = function(name, value) {
             eval('var ' + forLoopBlock.data('as') + ' = ' + JSON.stringify(item) + ';');
             let template = forLoopBlock.find('template').html();
             template = template.replaceAll(/\{(.*?)\}/g, function(match, contents) {
+                contents = contents
+                    .replaceAll('&amp;', '&')
+                    .replaceAll('&gt;', '>')
+                    .replaceAll('&lt;', '<');
                 if (typeof eval(contents) === 'object') {
                     return JSON.stringify(eval(contents)).replaceAll('"', "'");
                 }
@@ -91,6 +97,7 @@ const updateDom = function(name, value) {
             });
             forLoopBlock.append(template);
         });
+        // updateBlocks();
     }
 
 }
@@ -294,7 +301,9 @@ const setDomStates = function() {
         }
 
         if ( $(this).is(':radio') ) {
-            value = $(this).filter(':checked').val() || false;
+            if (!value) {
+                value = $(this).filter(':checked').val() || false;
+            }
             if (_state) {
                 $(this).prop('checked', _state);
             }
@@ -315,7 +324,7 @@ const setDomStates = function() {
             if (_state) {
                 if (typeof _state === 'object') {
                     $.each(_state, function(key, val) {
-                        $(this).find('option[value="' + val + '"]').attr('selected', 'selected');
+                        $(this).find('option[value="' + val + '"]').prop('selected', true);
                     }.bind(this));
                 } else {
                     $(this).find('option[value="' + _state + '"]').attr('selected', 'selected');
@@ -344,9 +353,13 @@ const getState = function(name) {
     return $state[name];
 }
 
-setDomStates();
-updateBlocks();
-if ($watchStates) {
-    watchStates();
+const dataApiInit = () => {
+    setDomStates();
+    updateBlocks();
+    if ($watchStates) {
+        watchStates();
+    }
+    watchExpressions();
 }
-watchExpressions();
+
+dataApiInit();

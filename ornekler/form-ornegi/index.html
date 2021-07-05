@@ -37,10 +37,10 @@
         </div>
         <div class="flex-container">
             <div class="flex-item">
-                <select multiple style="height: 120px; padding: 10px" data-state="form1.backendSkills">
-                    <option selected value="php">PHP</option>
+                <select multiple style="height: 120px; padding: 10px" data-state="form1.backendSkills" data-value="['php', 'python']">
+                    <option value="php">PHP</option>
                     <option value="nodej">Nodejs</option>
-                    <option selected value="python">Python</option>
+                    <option value="python">Python</option>
                     <option value="java">Java</option>
                     <option value="dart">Dart</option>
                 </select>
@@ -49,7 +49,7 @@
         <div class="flex-container">
             <div class="flex-item">
                 <label>
-                    <input type="checkbox" data-state="form1.accept_rules" value="1" checked>
+                    <input type="checkbox" data-state="form1.accept_rules" value="1">
                     Kuralları okuduğumu kabul ediyorum
                 </label>
             </div>
@@ -66,6 +66,13 @@
                     <input type="radio" data-state="form1.answer" checked name="answer" value="hayir">
                     Hayır
                 </label>
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="flex-item flex-button">
+                <button data-block data-disabled="!$state.form1.accept_rules" onclick="getData()">
+                    {$state.form1.accept_rules ? 'Bilgileri Al' : 'Bilgileri almak için kuralları kabul etmelisiniz!'}
+                </button>
             </div>
         </div>
         <pre data-block>{parseJson($state.form1)}</pre>
