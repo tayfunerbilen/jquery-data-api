@@ -33,6 +33,23 @@ jQuery'i kullanırken diğer javascript frameworkleri gibi biraz daha reactive o
 
 > **Not:** Bu script'in hataları olabilir. Javascript frameworkleri gibi çalışmaz, belli kurallar dahilinde kodlarınıza biraz reactivite katmak için kullanabilirsiniz. SPA oluşturmak için yeterli değildir, örneklerde basit bir SPA oluşturduk ancak bu scriptin amacına çokta uygun bir örnek değil bunu aklınızdan çıkarmayın :)
 
+## Olaylar
+
+### `jq-data-api` Olayı
+
+Script kullanıma uygun hale geldiğinde bu olayı trigger eder. Hata almamak için state tanımlamalarınızı metodlarla yapıyorsanız ve stateEffect() metodunu kullanıyorsanız bunun içinde yazmaya özen gösterin.
+
+```js
+$(document).on('jq-data-api', function() {
+    // tanımlar
+    setState('name', 'Tayfun');
+    
+    stateEffect((name) => {
+        console.log('state değişti', name);
+    }, ['name'])
+});
+```
+
 ## Tüm Metodlar
 
 ### `setState()` metodu

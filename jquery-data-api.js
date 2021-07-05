@@ -1,4 +1,3 @@
-
 const $state = {};
 
 let $watchStates = true,
@@ -365,3 +364,5 @@ const dataApiInit = () => {
 }
 
 dataApiInit();
+
+$(document).trigger('jq-data-api');

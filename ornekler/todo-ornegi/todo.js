@@ -5,8 +5,6 @@ let s4 = () => {
         .substring(1);
   }
 
-setState('todos', []);
-
 const addTodo = () => {
     if (!$state.todo) {
         alert('Lütfen bir todo başlığı belirtin!');
@@ -47,3 +45,5 @@ const updateTodo = (todo) => {
 const reverseTodo = () => {
     updateState('todos', $state.todos.reverse());
 }
+
+setState('todos', []);
