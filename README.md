@@ -128,11 +128,11 @@ Değişebilir değerlerinizi tanımlamak için bu niteliği kullanabilirsiniz. �
 <input type="text" data-state="name" value="Tayfun" />
 ```
 
-Bütün stateler `$state` global değişkenin altında tutuluyor. Yani oluşturduğunuz state'e `$state.key` şeklinde ya da `state('key')` şeklinde erişebilirsiniz.
+Bütün stateler `$state` global değişkenin altında tutuluyor. Yani oluşturduğunuz state'e `$state.key` şeklinde ya da `getState('key')` şeklinde erişebilirsiniz.
 
 ```js
 console.log($state.name); // Tayfun
-console.log(state('name')); // Tayfun
+console.log(getState('name')); // Tayfun
 ```
 
 ### `[data-value]` niteliği
