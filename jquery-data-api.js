@@ -1,5 +1,7 @@
-const $state = {},
-    $watchStates = true,
+
+const $state = {};
+
+let $watchStates = true,
     $debug = false;
 
 const setWatchStates = function(val) {
@@ -168,7 +170,7 @@ const watchStates = function() {
     $(document).on('change', '[data-select]', function(){
         const name = $(this).data('state'),
             value = $(this).val();
-        if (typeof value !== 'array' && stateCheckDepth(name) !== value) {
+        if (typeof value !== 'object' && stateCheckDepth(name) !== value) {
             setStateEvent(name, value, $state[name]);
             stateUpdateDepth(name, value);
             watchExpressions();
