@@ -23,16 +23,32 @@ if ($debug) {
     }
 }
 
+const stateUpdateDepth = (name, value) => {
+    const split = name.split('.');
+    if (split.length > 1) {
+        return $state[split[0]][split[1]] = value;
+    }
+    return $state[name] = value;
+}
+
+const stateCheckDepth = (name, value) => {
+    const split = name.split('.');
+    if (split.length > 1) {
+        return $state[split[0]][split[1]];
+    }
+    return $state[name];
+}
+
 const setState = function(name, value) {
     setStateEvent(name, value, $state[name]);
-    $state[name] = value;
+    stateUpdateDepth(name, value);
     updateDom(name, value);
     watchExpressions();
 }
 
 const updateState = function(name, value) {
     setStateEvent(name, value, $state[name]);
-    $state[name] = value;
+    stateUpdateDepth(name, value);
     watchExpressions();
     updateDom(name, value);
 }
@@ -61,7 +77,7 @@ const updateDom = function(name, value) {
     }
 
     const forLoopBlock = $('[data-for="' + name + '"]');
-    if (forLoopBlock) {
+    if (forLoopBlock.length) {
         let template = forLoopBlock.find('template').clone();
         forLoopBlock.html('').append(template);
         $.each(value, function(key, item) {
@@ -90,9 +106,9 @@ const watchStates = function() {
         if ( value.match(/^[0-9\.\,]+$/) ) {
             value = parseFloat(value);
         }
-        if ($state[name] !== value) {
+        if (stateCheckDepth(name) !== value) {
             setStateEvent(name, value, $state[name]);
-            $state[name] = value;
+            stateUpdateDepth(name, value);
             watchExpressions();
         }
     });
@@ -103,9 +119,9 @@ const watchStates = function() {
     $(document).on('change', '[data-checkbox]', function(){
         const name = $(this).data('state'),
             value = $(this).prop('checked');
-        if ($state[name] !== value) {
+        if (stateCheckDepth(name) !== value) {
             setStateEvent(name, value, $state[name]);
-            $state[name] = value;
+            stateUpdateDepth(name, value);
             watchExpressions();
         }
     });
@@ -116,9 +132,9 @@ const watchStates = function() {
     $(document).on('change', '[data-radio]', function(){
         const name = $(this).data('state'),
             value = $(this).val();
-        if ($state[name] !== value) {
+        if (stateCheckDepth(name) !== value) {
             setStateEvent(name, value, $state[name]);
-            $state[name] = value;
+            stateUpdateDepth(name, value);
             watchExpressions();
         }
     });
@@ -132,9 +148,9 @@ const watchStates = function() {
         if ( !$(this).attr('multiple') ) {
             value = value[0];
         }
-        if ($state[name] !== value) {
+        if (stateCheckDepth(name) !== value) {
             setStateEvent(name, value, $state[name]);
-            $state[name] = value;
+            stateUpdateDepth(name, value);
             watchExpressions();
         }
     });
@@ -145,9 +161,9 @@ const watchStates = function() {
     $(document).on('change', '[data-select]', function(){
         const name = $(this).data('state'),
             value = $(this).val();
-        if (typeof value !== 'array' && $state[name] !== value) {
+        if (typeof value !== 'array' && stateCheckDepth(name) !== value) {
             setStateEvent(name, value, $state[name]);
-            $state[name] = value;
+            stateUpdateDepth(name, value);
             watchExpressions();
         }
     });
@@ -175,8 +191,8 @@ const watchExpressions = function() {
     });
 
     $('[data-text]').each(function(){
-        if ($(this).html() !== $state[$(this).data('text')]) {
-            $(this).html($state[$(this).data('text')]);
+        if ($(this).html() !== stateCheckDepth($(this).data('text'))) {
+            $(this).html(stateCheckDepth($(this).data('text')));
         }
     });
 
@@ -186,11 +202,25 @@ const watchExpressions = function() {
     });
 
     $('[data-show]').each(function(){
-        const condition = eval($(this).data('show'));
+        const condition = eval($(this).data('show')),
+            effectFade = $(this).data('fade'),
+            effectSlide = $(this).data('slide');
         if (condition) {
-            $(this).show();
+            if (effectFade) {
+                $(this).fadeIn(effectFade);
+            } else if (effectSlide) {
+                $(this).slideDown(effectSlide);
+            } else {
+                $(this).show();
+            }
         } else {
-            $(this).hide();
+            if (effectFade) {
+                $(this).fadeOut(effectFade);
+            } else if (effectSlide) {
+                $(this).slideUp(effectSlide);
+            } else {
+                $(this).hide();
+            }
         }
     });
 }
@@ -210,9 +240,15 @@ const stateEffect = function(callback, states = false) {
 const updateBlocks = function() {
     $('[data-block]').each(function(){
         let html = $(this).html();
+        
+        html = html.replaceAll(/\$\{(.*?)\}/g, '###$1###');
         html = html.replaceAll(/\{(.*?)\}/gsu, function(expression, content) {
-            content = content.replaceAll('&amp;', '&').replaceAll('&gt;', '>').replaceAll('&lt;', '<');
-            if (content.match(/[\?\&\=\s\+]+/g)) {
+            content = content
+                .replaceAll('&amp;', '&')
+                .replaceAll('&gt;', '>')
+                .replaceAll('&lt;', '<')
+                .replaceAll(/###(.*?)###/g, '${$1}');
+            if (content.match(/[\?\&\=\s\+\(\)]+/g)) {
                 return `<span data-expression="${content}">${eval(content)}</span>`;
             }
             return `<span data-text="${content.replace('$state.', '')}">${eval(content)}</span>`;
@@ -224,32 +260,43 @@ const updateBlocks = function() {
 const setDomStates = function() {
     $('[data-state]').each(function(){
 
-        const name = $(this).data('state');
-        let value;
+        const name = $(this).data('state'),
+            nameSplited = name.split('.');
+        let value = $(this).data('value') ? eval($(this).data('value')) : null;
+
+        var _state;
+        if (nameSplited.length > 1) {
+            if (typeof $state[nameSplited[0]] === 'undefined') {
+                $state[nameSplited[0]] = {};
+            }
+            _state = $state[nameSplited[0]][nameSplited[1]] = value;
+        } else {
+            _state = $state[name]
+        }
     
         if ( $(this).is('input:not(:checkbox):not(:radio):not(:file)') ) {
-            value = $(this).val();
-            if ( value.match(/^[0-9\.\,]+$/) ) {
+            value = $(this).val() || null;
+            if ( value && value.match(/^[0-9\.\,]+$/) ) {
                 value = parseFloat(value);
             }
             $(this).attr('data-input', '');
-            if ($state[name]) {
-                $(this).val($state[name]);
+            if (_state) {
+                $(this).val(_state);
             }
         }
 
         if ( $(this).is(':checkbox') ) {
-            value = $(':checked', this).val();
-            if ($state[name]) {
-                $(this).prop('checked', $state[name]);
+            value = $(this).prop('checked') || false;
+            if (_state) {
+                $(this).prop('checked', _state);
             }
             $(this).attr('data-checkbox', '');
         }
 
         if ( $(this).is(':radio') ) {
-            value = $(this).filter(':checked').val();
-            if ($state[name]) {
-                $(this).prop('checked', $state[name]);
+            value = $(this).filter(':checked').val() || false;
+            if (_state) {
+                $(this).prop('checked', _state);
             }
             $(this).attr('data-radio', '');
         }
@@ -260,23 +307,30 @@ const setDomStates = function() {
         }
 
         if ( $(this).is('select') ) {
-            value = $('option:selected', this).val();
-            if ($state[name]) {
-                if (typeof $state[name] === 'object') {
-                    $.each($state[name], function(key, val) {
+            if ($(this).attr('multiple')) {
+                value = $(this).val();
+            } else {
+                value = $('option:selected:not(:disabled)', this).val() || null;
+            }
+            if (_state) {
+                if (typeof _state === 'object') {
+                    $.each(_state, function(key, val) {
                         $(this).find('option[value="' + val + '"]').attr('selected', 'selected');
                     }.bind(this));
                 } else {
-                    $(this).find('option[value="' + $state[name] + '"]').attr('selected', 'selected');
+                    $(this).find('option[value="' + _state + '"]').attr('selected', 'selected');
                 }
             }
             $(this).attr('data-select', '');
         }
     
-        if (!$state[name]) {
-            $state[name] = value;
+        if (!_state) {
+            if (nameSplited.length > 1) {
+                $state[nameSplited[0]][nameSplited[1]] = value;
+            } else {
+                $state[name] = value;
+            }
         }
-
         setStateEvent(name, value, value);
     
     });

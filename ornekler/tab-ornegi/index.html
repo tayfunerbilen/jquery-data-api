@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jquery-data-api / tab örneği</title>
+    <link rel="stylesheet" href="./tab.css">
+</head>
+<body>
+
+    <header>
+        jquery-data-api
+        <span>form örneği</span>
+    </header>
+
+    <div class="container" data-state="tab" data-value="1">
+        <nav class="tab">
+            <ul>
+                <li data-class="[$state.tab === 1, 'active']" onclick="updateState('tab', 1)">
+                    <a href="javascript:;">Tab 1</a>
+                </li>
+                <li data-class="[$state.tab === 2, 'active']" onclick="updateState('tab', 2)">
+                    <a href="javascript:;">Tab 2</a>
+                </li>
+                <li data-class="[$state.tab === 3, 'active']" onclick="updateState('tab', 3)">
+                    <a href="javascript:;">Tab 3</a>
+                </li>
+                <li data-class="[$state.tab === 4, 'active']" onclick="updateState('tab', 4)">
+                    <a href="javascript:;">Tab 4</a>
+                </li>
+            </ul>
+        </nav>
+        <div data-show="$state.tab === 1" class="tab-content">1. Tab Content</div>
+        <div data-show="$state.tab === 2" class="tab-content">2. Tab Content</div>
+        <div data-show="$state.tab === 3" class="tab-content">3. Tab Content</div>
+        <div data-show="$state.tab === 4" class="tab-content">4. Tab Content</div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../jquery-data-api.js"></script>
+    <script src="./tab.js"></script>
+    
+</body>
+</html>

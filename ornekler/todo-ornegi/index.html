@@ -32,6 +32,10 @@
             </div>
         </form>
 
+        <div data-block>
+            {$state.todo}
+        </div>
+
         <div data-show="$state.todos && $state.todos.length > 0" class="todos">
             <h3>Todo Listesi</h3>
             <ul data-for="todos" data-as="todo">
@@ -41,6 +45,7 @@
                             {todo.content}
                         </span>
                         <button onclick="deleteTodo('{todo.id}', event)">Sil</button>
+                        
                     </li>
                 </template>
             </ul>

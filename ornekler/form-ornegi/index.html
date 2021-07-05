@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jquery-data-api / form örneği</title>
+    <link rel="stylesheet" href="./form.css">
+</head>
+<body>
+
+    <header>
+        jquery-data-api
+        <span>form örneği</span>
+    </header>
+
+    <div class="container" data-state="form1" data-value="{}">
+        <div class="flex-container">
+            <div class="flex-item">
+                <input type="text" placeholder="Adınız" data-state="form1.name">
+            </div>
+            <div class="flex-item">
+                <input type="text" placeholder="Soyadınız" data-state="form1.surname">
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="flex-item">
+                <select data-state="form1.gender">
+                    <option selected disabled>Cinsiyet seçin</option>
+                    <option value="1">Erkek</option>
+                    <option value="2">Kadın</option>
+                </select>
+            </div>
+            <div class="flex-item">
+                <input type="file" data-state="form1.images" multiple accept="image/*">
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="flex-item">
+                <select multiple style="height: 120px; padding: 10px" data-state="form1.backendSkills">
+                    <option selected value="php">PHP</option>
+                    <option value="nodej">Nodejs</option>
+                    <option selected value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="dart">Dart</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="flex-item">
+                <label>
+                    <input type="checkbox" data-state="form1.accept_rules" value="1" checked>
+                    Kuralları okuduğumu kabul ediyorum
+                </label>
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="flex-item">
+                <label>
+                    <input type="radio" data-state="form1.answer" name="answer" value="evet">
+                    Evet
+                </label>
+            </div>
+            <div class="flex-item">
+                <label>
+                    <input type="radio" data-state="form1.answer" checked name="answer" value="hayir">
+                    Hayır
+                </label>
+            </div>
+        </div>
+        <pre data-block>{parseJson($state.form1)}</pre>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./form.js"></script>
+    <script src="../../jquery-data-api.js"></script>
+    
+</body>
+</html>
