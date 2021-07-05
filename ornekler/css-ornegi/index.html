@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jquery-data-api / css örneği</title>
+    <link rel="stylesheet" href="./css.css">
+</head>
+<body data-css data-css-background="$state.background || 'red'">
+
+    <header>
+        jquery-data-api
+        <span>css örneği</span>
+    </header>
+
+    <div class="container">
+        <div class="flex-container">
+            <div class="flex-item">
+                <input type="number" data-state="left" step="20" placeholder="Soldan değeri">
+            </div>
+            <div class="flex-item">
+                <input type="number" data-state="top" step="20" placeholder="Yukarıdan değeri">
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="flex-item">
+                <input type="number" data-state="width" value="100" step="20" placeholder="Genişlik">
+            </div>
+            <div class="flex-item">
+                <input type="number" data-state="height" value="100" step="20" placeholder="Yükseklik">
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="flex-item">
+                <label>
+                    <input type="checkbox" data-state="rounded" value="1">
+                    Yuvarla
+                </label>
+            </div>
+            <div class="flex-item">
+                <input type="color" data-state="background" value="#afc6e4">
+            </div>
+        </div>
+        <div style="position: relative">
+            <div
+             data-css
+             data-css-width="$state.width + 'px'"
+             data-css-height="$state.height + 'px'"
+             data-css-left="($state.left || 0) + 'px'" 
+             data-css-top="($state.top || 0) + 'px'" 
+             data-css-border-radius="$state.rounded ? '50%' : ''"
+             style="transition: 300ms all; position: absolute; background: #274ae6"
+            ></div>
+        </div>
+    </div>
+
+    <div class="container" data-state="font" data-value="16" style="margin-top: 150px">
+        <div class="text-action">
+            <button onclick="decreaseFont()">Metni Küçült</button>
+            <span data-block>{$state.font}px</span>
+            <button onclick="increaseFont()">Metni Büyüt</button>
+        </div>
+        <div class="error" data-block data-show="$state.error">
+            {$state.error}
+        </div>
+        <div class="text" data-css data-css-font-size="$state.font + 'px'" data-css-line-height="$state.font + ($state.font / 2) + 'px'">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et risus eget elit pellentesque sagittis. Nunc sollicitudin convallis tempor. Vestibulum arcu enim, posuere a augue eu, interdum condimentum justo. Nam elementum est nibh, sit amet blandit felis semper id. Mauris lacinia blandit ultricies. Curabitur venenatis, purus suscipit aliquam aliquet, turpis felis bibendum nunc, finibus viverra lacus arcu id arcu. Proin dapibus, enim sed iaculis tincidunt, libero sem placerat urna, quis vestibulum arcu tortor vitae elit. Suspendisse at urna iaculis, efficitur risus id, dignissim erat. Nunc lacinia posuere turpis, sit amet venenatis turpis pretium vestibulum. Suspendisse sollicitudin eros viverra arcu condimentum, a varius diam aliquet. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi venenatis ligula ut neque tincidunt, ultricies ultricies nisl lacinia. Suspendisse tempor tempus neque, et venenatis tellus iaculis non. Sed et risus id libero dignissim mattis. Duis sed nunc sed libero semper elementum.
+            <br><br>
+            Praesent finibus tellus ut dui imperdiet volutpat. Morbi hendrerit maximus velit sed rutrum. Sed consequat placerat finibus. Nulla venenatis augue justo, nec commodo lacus faucibus ac. Etiam eget tellus at justo pellentesque interdum. Vestibulum ornare iaculis libero, eget lacinia nunc dictum eu. Nullam eu velit in felis eleifend porttitor sit amet sed ex. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque laoreet semper nisi, quis gravida urna sollicitudin id. Cras a ex et massa fringilla pellentesque a aliquam ante. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+            <br><br>
+            Vivamus tortor odio, feugiat sit amet pellentesque quis, lobortis sed augue. Curabitur consequat ante libero, sed ultrices ligula ullamcorper id. Duis nisi lorem, iaculis ut rhoncus vel, maximus sed metus. Ut lectus dui, pharetra nec imperdiet nec, pellentesque vel sem. Nulla et tincidunt ex. Morbi non metus ut mi tristique euismod nec sed odio. In sit amet libero tempus, dapibus lacus nec, posuere purus. Duis eget interdum diam. Praesent ullamcorper tortor pellentesque quam tincidunt, at rutrum enim aliquam. Donec posuere eget urna quis pharetra. Integer vel metus at lorem posuere ullamcorper in ut quam.
+            <br><br>
+            Ut id ligula ultricies metus porta malesuada. Mauris eu mi ex. Sed pretium magna sollicitudin, sollicitudin nulla non, mattis lorem. Fusce fermentum bibendum neque, id gravida est sagittis euismod. Nam ac nulla at ligula volutpat cursus in a tortor. Nullam commodo, lacus at blandit interdum, metus felis accumsan justo, in lobortis risus mauris eu tortor. Fusce odio velit, mattis sit amet consectetur sed, blandit sit amet leo. Praesent elementum elit ipsum, in pharetra ex rhoncus a. Nulla gravida vitae velit id ornare. Duis venenatis, justo ut bibendum lobortis, erat dui ultricies mauris, eu venenatis nulla ligula in turpis. Aenean vitae sodales odio, nec tempor eros.
+            <br><br>
+            Praesent viverra dapibus lacus, non scelerisque ligula pulvinar ac. Nunc posuere lorem vitae ipsum volutpat, eget aliquet metus porttitor. Curabitur eu tempus quam. Vestibulum sed sapien sit amet massa vestibulum mollis in id purus. Sed rutrum bibendum suscipit. Phasellus eget feugiat dolor. Sed ac quam eu metus viverra porttitor. Nullam varius dui vel quam dictum, ut aliquam mauris imperdiet. Sed ultrices faucibus orci in lacinia. Aenean id ornare nibh.
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../jquery-data-api.min.js"></script>
+    <script src="css.js"></script>
+    
+</body>
+</html>

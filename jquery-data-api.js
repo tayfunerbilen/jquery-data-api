@@ -180,6 +180,21 @@ const watchStates = function() {
 
 const watchExpressions = function() {
 
+    $('[data-css]').each(function(){
+
+        const styles = {};
+
+        $.each($(this)[0].dataset, function(key, val) {
+            if (key !== 'css' && key.includes('css')) {
+                key = key.replace('css', '');
+                key = key.charAt(0).toLowerCase() + key.slice(1);
+                styles[key] = val.match(/[\.\}\$\+\']+/g) ? eval(val) : val;
+            }
+        });
+
+        $(this).css(styles);
+    });
+
     $('[data-disabled]').each(function(){
         const disabled = eval($(this).data('disabled'));
         if (disabled) {

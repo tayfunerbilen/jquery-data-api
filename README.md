@@ -19,6 +19,7 @@ jQuery'i kullanırken diğer javascript frameworkleri gibi biraz daha reactive o
 - [[data-show]](#data-show-niteliği)
 - [[data-expression]](#data-expression-niteliği)
 - [[data-for]](#data-for-niteliği)
+- [[data-css]](#data-css-niteliği)
 
 ## Örnek Kullanımlar
 
@@ -27,6 +28,7 @@ jQuery'i kullanırken diğer javascript frameworkleri gibi biraz daha reactive o
 - [Tab Örneği](https://github.com/tayfunerbilen/jquery-data-api/tree/main/ornekler/tab-ornegi)
 - [Form Örneği](https://github.com/tayfunerbilen/jquery-data-api/tree/main/ornekler/form-ornegi)
 - [Todolist Örneği](https://github.com/tayfunerbilen/jquery-data-api/tree/main/ornekler/todo-ornegi)
+- [CSS Örneği](https://github.com/tayfunerbilen/jquery-data-api/tree/main/ornekler/css-ornegi)
 - [Para Harcama Örneği](https://github.com/tayfunerbilen/jquery-data-api/tree/main/ornekler/para-harcama-ornegi)
 
 ---
@@ -264,4 +266,26 @@ const todos = [
 ];
 setState('todos', todos);
 </script>
+```
+
+### `[data-css]` niteliği
+
+Değişen değerlerinizi css olarak tanımlamak isterseniz bu niteliği kullanabilirsiniz. Daha sonra değişmesini istediğiniz değeri `data-css` ten hemen sonra belirtin. Mesela `background-color` değeri için `[data-css-background-color=""]` şeklinde tanımlama yapmalısınız. Örneğin;
+
+```html
+<style>
+.box {
+    width: 100px;
+    height: 100px;
+}
+</style>
+
+<div class="box" data-css data-css-color="$state.color === 'yellow' ? 'black' : 'white'" data-css-background-color="$state.color || 'blue'">box</div>
+
+<select data-state="color">
+    <option selected disabled>Renk seçin</option>
+    <option value="yellow">Sarı</option>
+    <option value="red">Kırmızı</option>
+    <option value="black">Siyah</option>
+</select>
 ```
