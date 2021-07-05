@@ -1,6 +1,8 @@
 # jquery-data-api
 
-jQuery'i kullanırken diğer javascript frameworkleri gibi biraz daha reactive olsa dediğim çok zaman olmuştu zamanında. Artık çok fazla jquery kullanmasamda projelerinde hala kullananlar olabileceğini düşündüğüm için basit bir `data-api` sistemi geliştirdim.
+Bildiğiniz gibi jQuery bir javascript kütüphanesi. Yani diğer frameworkler ile karşılaştırmak saçma olur.
+
+Ancak mevcut javascript frameworkleri gibi biraz daha reactive olsa dediğim çok zaman olmuştu zamanında. Artık çok fazla jquery kullanmasamda projelerinde hala kullananlar olabileceğini düşündüğüm için basit bir `data-api` sistemi geliştirdim.
 
 ## Kullanabileceğiniz Metodlar
 
