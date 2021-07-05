@@ -12,11 +12,13 @@ jQuery'i kullanırken diğer javascript frameworkleri gibi biraz daha reactive o
 ## Kullanabileceğiniz Nitelikler
 
 - [[data-state]](#data-state-niteliği)
+- [[data-value]](#data-value-niteliği)
 - [[data-block]](#data-block-niteliği)
 - [[data-disabled]](#data-disabled-niteliği)
 - [[data-class]](#data-class-niteliği)
 - [[data-show]](#data-show-niteliği)
 - [[data-expression]](#data-expression-niteliği)
+- [[data-for]](#data-for-niteliği)
 
 ## Örnek Kullanımlar
 
@@ -114,6 +116,23 @@ console.log($state.name); // Tayfun
 console.log(state('name')); // Tayfun
 ```
 
+### `[data-value]` niteliği
+
+`[data-state]` ile oluşturduğunuz state'e değer atamak için kullanabilirsiniz. Ancak javascript ifadesi gibi çalışacağı için eğer string bir değer atayacaksanız tırnaklar içinde kullanmanız gerekiyor. Ayrıca dizi vs.de tanımlayabilirsiniz. Örneğin;
+
+```html
+<select multiple data-state="skills" data-value="['php', 'js']">
+    <option value="php">PHP</option>
+    <option value="js">Javascript</option>
+    <option value="python">Python</option>
+    <option value="css">CSS</option>
+</select>
+
+<input type="text" data-state="name" data-value="'Tayfun'">
+
+<!-- Alternatif olarak form elemanlarına value ile değer verebilir ya da checked, selected gibi nitelikleri ekleyerekte state'in değerini oluşturmasını sağlayabilirsiniz -->
+<input type="text" data-state="name2" value="Tayfun2">
+```
 ### `[data-block]` niteliği
 
 Bu nitelik içinde `{$state.key}` şeklinde artık stateleriniz dinamik olarak gösterebilir ya da javascript ifadeleri yazabilirsiniz. Örneğin;
@@ -194,4 +213,38 @@ Javascript ifadeleri çalıştırmak için kullanabilirsiniz. Genellikle `[data-
 <button onclick="updateState('name', 'Murat')">İsmi Değiştir</button>
 
 <div data-expression="$state.name === 'Murat' ? 'Yanlış isim' : 'Doğru yoldasın!'"></div>
+```
+
+### `[data-for]` niteliği
+
+For döngüsünden bir farkı yok. Kullanırken `[data-for]` içinde state'i belirtiyoruz ve ilgili elemanı içeride hangi isimle kullanacağımızıda `[data-as]` ile belirliyoruz. Örneğin;
+
+```html
+<style>
+li.done {
+    background-color: lime;
+}
+</style>
+
+<ul data-for="todos" data-as="todo">
+    <template>
+        <li class="{todo.done ? 'done' : ''}">
+            {todo.name}
+        </li>
+    </template>
+</ul>
+
+<script>
+const todos = [
+    {
+        name: 'todo 1',
+        done: false
+    },
+    {
+        name: 'todo 2',
+        done: true
+    }
+];
+setState('todos', todos);
+</script>
 ```
