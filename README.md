@@ -22,6 +22,7 @@ Ancak mevcut javascript frameworkleri gibi biraz daha reactive olsa dediğim ço
 - [[data-expression]](#data-expression-niteliği)
 - [[data-for]](#data-for-niteliği)
 - [[data-css]](#data-css-niteliği)
+- [[data-attribute]](#data-attribute-niteliği)
 
 ## Örnek Kullanımlar
 
