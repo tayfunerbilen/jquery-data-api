@@ -400,7 +400,7 @@ const setDomStates = function () {
             }
         }
 
-        if ($(this).is(':file')) {
+        if ($(this).is(':file:not([data-custom])')) {
             value = false;
             $(this).attr('data-file', '');
         }
