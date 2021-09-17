@@ -297,11 +297,13 @@ Değişen değerlerinizi css olarak tanımlamak isterseniz bu niteliği kullanab
 Değişen değerlerinizi nitelik olarak tanımlamak isterseniz bu niteliği kullanabilirsiniz. Örneğin;
 
 ```html
-<input type="file" data-state="image" />
+<input type="file" />
 <div data-show="$state.image">
     <img data-attribute="['src', $state.image]" height="200" />
 </div>
 <script>
+    setState('image')
+
     $('input[type="file"]').on('change', function() {
         const file = $(this)[0].files[0]
         const reader = new FileReader()
