@@ -291,3 +291,24 @@ Değişen değerlerinizi css olarak tanımlamak isterseniz bu niteliği kullanab
     <option value="black">Siyah</option>
 </select>
 ```
+
+### `[data-attribute]` niteliği
+
+Değişen değerlerinizi nitelik olarak tanımlamak isterseniz bu niteliği kullanabilirsiniz. Örneğin;
+
+```html
+<input type="file" data-state="image" />
+<div data-show="$state.image">
+    <img data-attribute="['src', $state.image]" height="200" />
+</div>
+<script>
+    $('input[type="file"]').on('change', function() {
+        const file = $(this)[0].files[0]
+        const reader = new FileReader()
+        reader.addEventListener('load', function() {
+            updateState('image', this.result)
+        })
+        reader.readAsDataURL(file)
+    });
+</script>
+```
